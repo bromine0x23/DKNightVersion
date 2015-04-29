@@ -1,6 +1,6 @@
 //
-//  UILabel+NightVersion.h
-//  UILabel+NightVersion
+//  UIButton+NightVersion.h
+//  UIButton+NightVersion
 //
 //  Copyright (c) 2015 Draveness. All rights reserved.
 //
@@ -9,9 +9,9 @@
 //  test it. And finally open a pull request.
 
 #import <UIKit/UIKit.h>
-#import "UILabel+TextColor.h"
+#import "UIButton+TitleColor.h"
 
-@interface UILabel (NightVersion)
+@interface UIButton (NightVersion)
 
 - (void)transformColor;
 

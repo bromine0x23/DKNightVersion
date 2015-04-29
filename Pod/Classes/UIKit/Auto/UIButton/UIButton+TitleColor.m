@@ -1,6 +1,6 @@
 //
-//  UILabel+TextColor.m
-//  UILabel+TextColor
+//  UIButton+TitleColor.m
+//  UIButton+TitleColor
 //
 //  Copyright (c) 2015 Draveness. All rights reserved.
 //
@@ -8,20 +8,20 @@
 //  in this file, you are supposed to update the ruby code, run it and 
 //  test it. And finally open a pull request.
 
-#import "UILabel+textColor.h"
+#import "UIButton+titleColor.h"
 #import "DKNightVersionManager.h"
 #import "objc/runtime.h"
 
-@interface UILabel ()
+@interface UIButton ()
 
-@property (nonatomic, strong) UIColor *normalTextColor;
+@property (nonatomic, strong) UIColor *normalTitleColor;
 
 @end
 
-static char *nightTextColorKey;
-static char *normalTextColorKey;
+static char *nightTitleColorKey;
+static char *normalTitleColorKey;
 
-@implementation UILabel (TextColor)
+@implementation UIButton (TitleColor)
 
 #pragma mark - Hook
 
@@ -29,8 +29,8 @@ static char *normalTextColorKey;
     static dispatch_once_t onceToken;                                              
     dispatch_once(&onceToken, ^{                                                   
         Class class = [self class];                                                
-        SEL originalSelector = @selector(setTextColor:);                                  
-        SEL swizzledSelector = @selector(hook_setTextColor:);                                 
+        SEL originalSelector = @selector(setTitleColor: forState:);                                  
+        SEL swizzledSelector = @selector(hook_setTitleColor: forState:);                                 
         Method originalMethod = class_getInstanceMethod(class, originalSelector);  
         Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);  
         BOOL didAddMethod =                                                        
@@ -43,32 +43,32 @@ static char *normalTextColorKey;
     });
 }
 
-- (void)hook_setTextColor:(UIColor *)textColor  {
+- (void)hook_setTitleColor:(UIColor *)titleColor forState:(UIControlState)state {
     if ([DKNightVersionManager currentThemeVersion] == DKThemeVersionNormal) {
-        [self setNormalTextColor:textColor];
+        [self setNormalTitleColor:titleColor];
     }
-    [self hook_setTextColor:textColor];
+    [self hook_setTitleColor:titleColor forState:UIControlStateNormal];
 }
 
-#pragma mark - TextColor
+#pragma mark - TitleColor
 
-- (UIColor *)normalTextColor {
-    return objc_getAssociatedObject(self, &normalTextColorKey);
+- (UIColor *)normalTitleColor {
+    return objc_getAssociatedObject(self, &normalTitleColorKey);
 }
 
-- (void)setNormalTextColor:(UIColor *)normalTextColor {
-    objc_setAssociatedObject(self, &normalTextColorKey, normalTextColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setNormalTitleColor:(UIColor *)normalTitleColor {
+    objc_setAssociatedObject(self, &normalTitleColorKey, normalTitleColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (UIColor *)nightTextColor {
-    return objc_getAssociatedObject(self, &nightTextColorKey) ? : self.textColor;
+- (UIColor *)nightTitleColor {
+    return objc_getAssociatedObject(self, &nightTitleColorKey) ? : self.currentTitleColor;
 }
 
-- (void)setNightTextColor:(UIColor *)nightTextColor {
+- (void)setNightTitleColor:(UIColor *)nightTitleColor {
     if ([DKNightVersionManager currentThemeVersion] == DKThemeVersionNight) {
-        [self setTextColor:nightTextColor];
+        [self setTitleColor:nightTitleColor forState:UIControlStateNormal];
     }
-    objc_setAssociatedObject(self, &nightTextColorKey, nightTextColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &nightTitleColorKey, nightTitleColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 

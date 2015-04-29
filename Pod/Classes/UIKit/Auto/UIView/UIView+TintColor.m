@@ -1,6 +1,6 @@
 //
-//  UILabel+TextColor.m
-//  UILabel+TextColor
+//  UIView+TintColor.m
+//  UIView+TintColor
 //
 //  Copyright (c) 2015 Draveness. All rights reserved.
 //
@@ -8,20 +8,20 @@
 //  in this file, you are supposed to update the ruby code, run it and 
 //  test it. And finally open a pull request.
 
-#import "UILabel+textColor.h"
+#import "UIView+tintColor.h"
 #import "DKNightVersionManager.h"
 #import "objc/runtime.h"
 
-@interface UILabel ()
+@interface UIView ()
 
-@property (nonatomic, strong) UIColor *normalTextColor;
+@property (nonatomic, strong) UIColor *normalTintColor;
 
 @end
 
-static char *nightTextColorKey;
-static char *normalTextColorKey;
+static char *nightTintColorKey;
+static char *normalTintColorKey;
 
-@implementation UILabel (TextColor)
+@implementation UIView (TintColor)
 
 #pragma mark - Hook
 
@@ -29,8 +29,8 @@ static char *normalTextColorKey;
     static dispatch_once_t onceToken;                                              
     dispatch_once(&onceToken, ^{                                                   
         Class class = [self class];                                                
-        SEL originalSelector = @selector(setTextColor:);                                  
-        SEL swizzledSelector = @selector(hook_setTextColor:);                                 
+        SEL originalSelector = @selector(setTintColor:);                                  
+        SEL swizzledSelector = @selector(hook_setTintColor:);                                 
         Method originalMethod = class_getInstanceMethod(class, originalSelector);  
         Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);  
         BOOL didAddMethod =                                                        
@@ -43,32 +43,32 @@ static char *normalTextColorKey;
     });
 }
 
-- (void)hook_setTextColor:(UIColor *)textColor  {
+- (void)hook_setTintColor:(UIColor *)tintColor  {
     if ([DKNightVersionManager currentThemeVersion] == DKThemeVersionNormal) {
-        [self setNormalTextColor:textColor];
+        [self setNormalTintColor:tintColor];
     }
-    [self hook_setTextColor:textColor];
+    [self hook_setTintColor:tintColor];
 }
 
-#pragma mark - TextColor
+#pragma mark - TintColor
 
-- (UIColor *)normalTextColor {
-    return objc_getAssociatedObject(self, &normalTextColorKey);
+- (UIColor *)normalTintColor {
+    return objc_getAssociatedObject(self, &normalTintColorKey);
 }
 
-- (void)setNormalTextColor:(UIColor *)normalTextColor {
-    objc_setAssociatedObject(self, &normalTextColorKey, normalTextColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setNormalTintColor:(UIColor *)normalTintColor {
+    objc_setAssociatedObject(self, &normalTintColorKey, normalTintColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (UIColor *)nightTextColor {
-    return objc_getAssociatedObject(self, &nightTextColorKey) ? : self.textColor;
+- (UIColor *)nightTintColor {
+    return objc_getAssociatedObject(self, &nightTintColorKey) ? : self.tintColor;
 }
 
-- (void)setNightTextColor:(UIColor *)nightTextColor {
+- (void)setNightTintColor:(UIColor *)nightTintColor {
     if ([DKNightVersionManager currentThemeVersion] == DKThemeVersionNight) {
-        [self setTextColor:nightTextColor];
+        [self setTintColor:nightTintColor];
     }
-    objc_setAssociatedObject(self, &nightTextColorKey, nightTextColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &nightTintColorKey, nightTintColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 

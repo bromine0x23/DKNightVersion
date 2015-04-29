@@ -1,6 +1,6 @@
 //
-//  UILabel+NightVersion.m
-//  UILabel+NightVersion
+//  UIButton+NightVersion.m
+//  UIButton+NightVersion
 //
 //  Copyright (c) 2015 Draveness. All rights reserved.
 //
@@ -8,19 +8,19 @@
 //  in this file, you are supposed to update the ruby code, run it and 
 //  test it. And finally open a pull request.
 
-#import "UILabel+NightVersion.h"
+#import "UIButton+NightVersion.h"
 #import "UIView+NightVersion.h"
 #import "DKNightVersionManager.h"
 #import "DKNightVersionConstants.h"
 
-@implementation UILabel (NightVersion)
+@implementation UIButton (NightVersion)
 
 #pragma mark - TransformColor
 
 - (void)transformColor {
     [super transformColor];
     [UIView animateWithDuration:NIGHT_ANIMATION_DURATION animations:^{
-        [self setTextColor:([DKNightVersionManager currentThemeVersion] == DKThemeVersionNight) ? self.nightTextColor : self.normalTextColor];
+        [self setTitleColor:([DKNightVersionManager currentThemeVersion] == DKThemeVersionNight) ? self.nightTitleColor : self.normalTitleColor forState:UIControlStateNormal];
     }];
 }
 
